@@ -1,0 +1,42 @@
+DATASET: cocostuff
+ROOT: /scratch/user/jiangziyu/data
+LABELS: ./data/datasets/cocostuff/labels_2.txt
+
+IMAGE:
+    MEAN:
+        R: 122.675
+        G: 116.669
+        B: 104.008
+    SIZE:
+        TRAIN: 321
+        TEST: 513
+
+# Model definition
+N_CLASSES: 7
+N_BLOCKS: [3, 4, 23, 3]
+PYRAMIDS: [6, 12, 18, 24]
+
+# Training setting
+CROPSIZE: 512
+INSIZE: 2448  # Max size is 2448
+BATCH_SIZE: 5
+IGNORE_LABEL: -1
+ITER_START: 1
+ITER_MAX: 30000
+ITER_SIZE: 2
+ITER_SNAP: 5000
+ITER_TF: 1
+LR_DECAY: 10
+LR: 0.0001
+MOMENTUM: 0.9
+OPTIMIZER: sgd
+POLY_POWER: 0.9
+WEIGHT_DECAY: 2.0e-5
+
+
+RESAMPLEFLAG: True
+SAVE_DIR: /scratch/user/jiangziyu/Res50_FPN/checkpoints
+EXPERIENT: res101_fpn_crop_ubFocalLoss
+LOG_DIR: runs
+NUM_WORKERS: 0
+DISPLAYPORT: 8097
