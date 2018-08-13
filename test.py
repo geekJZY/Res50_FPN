@@ -65,48 +65,47 @@ def main():
         shuffle=False,
     )
 
-    for epoch in range(10, 11, 5):
-        # Model
-        torch.set_grad_enabled(False)
-        model = fpn(CONFIG.N_CLASSES)
-        model = nn.DataParallel(model)
-        load_network(CONFIG.SAVE_DIR, model, "SateFPN", str(epoch) + "000")
-        model.to(device)
-        model.eval()
+    # Model
+    torch.set_grad_enabled(False)
+    model = fpn(CONFIG.N_CLASSES)
+    model = nn.DataParallel(model)
+    load_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
+    model.to(device)
+    model.eval()
 
-        #visualizer
-        # vis = Visualizer(CONFIG.DISPLAYPORT)
+    #visualizer
+    # vis = Visualizer(CONFIG.DISPLAYPORT)
 
-        hist = np.zeros((7, 7))
-        for i, (data, target) in enumerate(loader):
-            print("Process img%d" % i)
-            # Image
-            data = data.to(device)
+    hist = np.zeros((7, 7))
+    for i, (data, target) in enumerate(loader):
+        print("Process img%d" % i)
+        # Image
+        data = data.to(device)
 
-            # Propagate forward
-            output = model(data)
+        # Propagate forward
+        output = model(data)
 
-            # Resize target for {100%, 75%, 50%, Max} outputs
-            outImg = cv2.resize(output[0].to("cpu").max(0)[1].numpy(), (target.shape[1],) * 2, interpolation=
-                                cv2.INTER_NEAREST)
-            if i % 10 == 0:
-                save_dir = osp.join(CONFIG.SAVE_DIR, "images")
-                cv2.imwrite(osp.join(save_dir, "image"+str(i)+".png"), cv2.cvtColor(inputImgTransBack(data),
-                                                                                    cv2.COLOR_RGB2BGR))
-                cv2.imwrite(osp.join(save_dir, "predict"+str(i)+".png"), cv2.cvtColor(classToRGB(outImg),
-                                                                                      cv2.COLOR_RGB2BGR))
-                cv2.imwrite(osp.join(save_dir, "label" + str(i) + ".png"), cv2.cvtColor(classToRGB(target[0].to("cpu")),
-                                                                                        cv2.COLOR_RGB2BGR))
-            # metric computer
-            hist += label_accuracy_hist(target[0].to("cpu").numpy(), outImg, 7)
-            # visualizer
-            # vis.displayImg(inputImgTransBack(data), classToRGB(output.to("cpu").max(0)[1]),
-            #                 classToRGB(target[0].to("cpu")))
-        print("hist is {}".format(hist), file=open("output.txt", "a"))
-        _, acc_cls, recall_cls, iu, _ = hist_to_score(hist)
-        print("accuracy of every class is {}, recall of every class is {}, iu of every class is {}".format(
-            acc_cls, recall_cls, iu), file=open("output.txt", "a"))
-        print("mean iu is {}".format(np.nansum(iu[1:])/6), file=open("output.txt", "a"))
+        # Resize target for {100%, 75%, 50%, Max} outputs
+        outImg = cv2.resize(output[0].to("cpu").max(0)[1].numpy(), (target.shape[1],) * 2, interpolation=
+                            cv2.INTER_NEAREST)
+        # if i % 10 == 0:
+        #     save_dir = osp.join(CONFIG.SAVE_DIR, "images")
+        #     cv2.imwrite(osp.join(save_dir, "image"+str(i)+".png"), cv2.cvtColor(inputImgTransBack(data),
+        #                                                                         cv2.COLOR_RGB2BGR))
+        #     cv2.imwrite(osp.join(save_dir, "predict"+str(i)+".png"), cv2.cvtColor(classToRGB(outImg),
+        #                                                                           cv2.COLOR_RGB2BGR))
+        #     cv2.imwrite(osp.join(save_dir, "label" + str(i) + ".png"), cv2.cvtColor(classToRGB(target[0].to("cpu")),
+        #                                                                             cv2.COLOR_RGB2BGR))
+        # metric computer
+        hist += label_accuracy_hist(target[0].to("cpu").numpy(), outImg, 7)
+        # visualizer
+        # vis.displayImg(inputImgTransBack(data), classToRGB(output.to("cpu").max(0)[1]),
+        #                 classToRGB(target[0].to("cpu")))
+    print("hist is {}".format(hist), file=open("output.txt", "a"))
+    _, acc_cls, recall_cls, iu, _ = hist_to_score(hist)
+    print("accuracy of every class is {}, recall of every class is {}, iu of every class is {}".format(
+        acc_cls, recall_cls, iu), file=open("output.txt", "a"))
+    print("mean iu is {}".format(np.nansum(iu[1:])/6), file=open("output.txt", "a"))
 
 
 if __name__ == "__main__":

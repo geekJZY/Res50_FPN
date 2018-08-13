@@ -180,7 +180,10 @@ def main():
             target_ = torch.from_numpy(target_).long()
             target_ = target_.to(device)
             # Compute crossentropy loss
-            loss += criterion(output, target_)
+            if CONFIG.CENTERCOMPARE:
+                loss += criterion(output[:,:,240:-240,240:-240], target_[:,:,240:-240,240:-240])
+            else:
+                loss += criterion(output, target_)
             # Backpropagate (just compute gradients wrt the loss)
             loss /= float(CONFIG.ITER_SIZE)
             loss.backward()
