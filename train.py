@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 
 import os.path as osp
 import time
-import click
+# import click
 import cv2
 import numpy as np
 import torch
@@ -116,7 +116,7 @@ def main():
     criterion.to(device)
 
     #visualizer
-    vis = Visualizer(CONFIG.DISPLAYPORT)
+    # vis = Visualizer(CONFIG.DISPLAYPORT)
 
     model.train()
     iter_start_time = time.time()

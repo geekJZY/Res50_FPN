@@ -144,13 +144,13 @@ class MultiDataSet(data.Dataset):
             image = self.images[index]
             label = self.labels[index]
         image, label = self._transform(image, label)
-        imageLowReso = cv2.resize(
-            image,
-            (512, 512),
-            interpolation=cv2.INTER_LINEAR,
-        )
-        imageLowReso = imageLowReso / 255 - self.mean
-        imageLowReso = imageLowReso.transpose(2, 0, 1)
+        # imageLowReso = cv2.resize(
+        #     image,
+        #     (512, 512),
+        #     interpolation=cv2.INTER_LINEAR,
+        # )
+        # imageLowReso = imageLowReso / 255 - self.mean
+        # imageLowReso = imageLowReso.transpose(2, 0, 1)
         image = image / 255 - self.mean
         image = image.transpose(2, 0, 1)
         # image = image/255 - self.fcn_mean
@@ -159,7 +159,7 @@ class MultiDataSet(data.Dataset):
         timeFinish = time.time()
         # print("timeRead is %.2f \n timeLabelTrans is %.2f \n timeLabelTrans is %.2f \n" %
         #       (timeRead - timeStart, timeLabelTrans - timeRead, timeFinish - timeLabelTrans))
-        return image.astype(np.float32), imageLowReso.astype(np.float32), label.astype(np.int64)
+        return image.astype(np.float32), label.astype(np.int64)
 
     def _transform(self, image, label):
         # Scaling

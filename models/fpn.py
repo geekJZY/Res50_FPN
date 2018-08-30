@@ -74,7 +74,7 @@ class fpn(nn.Module):
     def __init__(self, numClass):
         super(fpn, self).__init__()
         # Res net
-        self.resnet = resnet101(True)
+        self.resnet = resnet50(True)
 
         # fpn module
         self.fpn = fpn_module(numClass)
