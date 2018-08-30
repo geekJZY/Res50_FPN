@@ -16,7 +16,7 @@ from addict import Dict
 from tqdm import tqdm
 from utils.visualizer import Visualizer
 from data.data_loading import *
-from models.fpn import fpn
+from models.fpnLowReso import fpn
 from utils.loss import CrossEntropyLoss2d, SoftCrossEntropyLoss2d, FocalLoss
 
 
@@ -181,7 +181,7 @@ def main():
             target_ = target_.to(device)
             # Compute crossentropy loss
             if CONFIG.CENTERCOMPARE:
-                loss += criterion(output[:,:,240:-240,240:-240], target_[:,:,240:-240,240:-240])
+                loss += criterion(output[:,:,120:-120,120:-120], target_[:,120:-120,120:-120])
             else:
                 loss += criterion(output, target_)
             # Backpropagate (just compute gradients wrt the loss)

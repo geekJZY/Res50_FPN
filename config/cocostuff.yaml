@@ -1,5 +1,5 @@
 DATASET: cocostuff
-ROOT: /scratch/user/jiangziyu/data
+ROOT: /hdd1/ziyu/data
 LABELS: ./data/datasets/cocostuff/labels_2.txt
 
 IMAGE:
@@ -17,9 +17,9 @@ N_BLOCKS: [3, 4, 23, 3]
 PYRAMIDS: [6, 12, 18, 24]
 
 # Training setting
-CROPSIZE: 1280
+CROPSIZE: 1024
 INSIZE: 2448  # Max size is 2448
-BATCH_SIZE: 4
+BATCH_SIZE: 8
 IGNORE_LABEL: -1
 ITER_START: 1
 ITER_MAX: 30000
@@ -34,10 +34,10 @@ POLY_POWER: 0.9
 WEIGHT_DECAY: 2.0e-5
 
 
-CENTERCOMPARE: True
+CENTERCOMPARE: False
 RESAMPLEFLAG: False
-SAVE_DIR: /scratch/user/jiangziyu/Res50_FPN/checkpoints
-EXPERIENT: res101_fpn_crop_1280_center_ubFocalLoss
+SAVE_DIR: /hdd1/ziyu/Res50_FPN/checkpoints
+EXPERIENT: res101_fpn_2448_1024_ubFocalLoss
 LOG_DIR: runs
 NUM_WORKERS: 0
 DISPLAYPORT: 8097

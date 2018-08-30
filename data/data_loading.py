@@ -64,10 +64,10 @@ def classToRGB(label):
     colmap[indices[0].tolist(), indices[1].tolist(), :] = [255, 255, 255]
     indices = np.where(label == 0)
     colmap[indices[0].tolist(), indices[1].tolist(), :] = [0, 0, 0]
-    # transform = ToTensor();
+    transform = ToTensor();
     #     plt.imshow(colmap)
     #     plt.show()
-    return colmap.astype(np.uint8)
+    return transform(colmap)
 
 
 def class_to_target(inputs, numClass):
@@ -130,20 +130,27 @@ class MultiDataSet(data.Dataset):
     def __getitem__(self, index):
         if not self.preload:
             timeStart = time.time()
-            Satsample = cv2.imread(join(self.fileDir, 'Sat/' + self.image_filenames[index]))
+            Satsample = cv2.imread(join(self.fileDir, "Sat/"+self.image_filenames[index]))
             image = cv2.cvtColor(Satsample, cv2.COLOR_BGR2RGB)
-            labelsamplename = find_label_map_name(self.image_filenames[index], self.labelExtension)
+
             #labelsample = cv2.imread(join(self.fileDir, 'Label/' + labelsamplename))
             #label = cv2.cvtColor(labelsample, cv2.COLOR_BGR2RGB)
             timeRead = time.time()
             #label = RGB_mapping_to_class(label)
             label = scipy.io.loadmat(join(self.fileDir, 'Notification/' +
-                                          labelsamplename.replace('.png', '.mat')))["label"]
+                                          self.image_filenames[index].replace('_sat.jpg', '_mask.mat')))["label"]
             timeLabelTrans = time.time()
         else:
             image = self.images[index]
             label = self.labels[index]
         image, label = self._transform(image, label)
+        imageLowReso = cv2.resize(
+            image,
+            (512, 512),
+            interpolation=cv2.INTER_LINEAR,
+        )
+        imageLowReso = imageLowReso / 255 - self.mean
+        imageLowReso = imageLowReso.transpose(2, 0, 1)
         image = image / 255 - self.mean
         image = image.transpose(2, 0, 1)
         # image = image/255 - self.fcn_mean
@@ -152,7 +159,7 @@ class MultiDataSet(data.Dataset):
         timeFinish = time.time()
         # print("timeRead is %.2f \n timeLabelTrans is %.2f \n timeLabelTrans is %.2f \n" %
         #       (timeRead - timeStart, timeLabelTrans - timeRead, timeFinish - timeLabelTrans))
-        return image.astype(np.float32), label.astype(np.int64)
+        return image.astype(np.float32), imageLowReso.astype(np.float32), label.astype(np.int64)
 
     def _transform(self, image, label):
         # Scaling
@@ -166,14 +173,15 @@ class MultiDataSet(data.Dataset):
         )
 
         if not self.testFlag:
-            label = cv2.resize(
-                label,
-                (self.inSize, self.inSize),
-                interpolation=cv2.INTER_NEAREST,
-            )
+            h, w, _ = image.shape
+            if self.inSize != self.cropSize:
+                label = cv2.resize(
+                    label,
+                    (self.inSize, self.inSize),
+                    interpolation=cv2.INTER_NEAREST,
+                )
 
             # Crop
-            h, w, _ = image.shape
             w_offset = random.randint(0, max(0, w - self.cropSize - 1))
             h_offset = random.randint(0, max(0, h - self.cropSize - 1))
 
