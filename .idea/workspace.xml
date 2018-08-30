@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4e31854a-662b-474f-bef9-d3134fae55d1" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/models/fpnLowReso.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testSimpleEnsemble.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/cocostuff.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/cocostuff.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/data_loading.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/data_loading.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
-    </list>
+    <list default="true" id="4e31854a-662b-474f-bef9-d3134fae55d1" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,8 +47,8 @@
       <file leaf-file-name="testSimpleEnsemble.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/testSimpleEnsemble.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-990">
-              <caret line="60" column="24" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+            <state relative-caret-position="330">
+              <caret line="120" column="35" selection-start-line="120" selection-start-column="16" selection-end-line="120" selection-end-column="35" />
               <folding>
                 <element signature="e#39#103#0" expanded="true" />
               </folding>
@@ -688,8 +678,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/testSimpleEnsemble.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-990">
-          <caret line="60" column="24" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+        <state relative-caret-position="330">
+          <caret line="120" column="35" selection-start-line="120" selection-start-column="16" selection-end-line="120" selection-end-column="35" />
           <folding>
             <element signature="e#39#103#0" expanded="true" />
           </folding>
