@@ -19,6 +19,6 @@ class Visualizer(object):
         self.vis.line(X=X_val, Y=Y_val, win='line', update='append' if self.vis.win_exists('line') else None)
         return
 
-    def drawTestLine(self, x, y_vali, y_test):
-        self.vis.line(X=x, Y=y_test, name="y_test", win='test_line')
+    def drawTestLine(self, x, y_vali, y_train):
+        self.vis.line(X=x, Y=y_train, name="y_train", win='test_line')
         self.vis.line(X=x, Y=y_vali, name="y_vali", win='test_line', update="append")

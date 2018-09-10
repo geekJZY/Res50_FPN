@@ -18,8 +18,8 @@ PYRAMIDS: [6, 12, 18, 24]
 
 # Training setting
 CROPSIZE: 508
-INSIZE: 2448  # Max size is 2448
-BATCH_SIZE: 14
+INSIZE: 508  # Max size is 2448
+BATCH_SIZE: 10
 IGNORE_LABEL: -1
 ITER_START: 1
 ITER_MAX: 50000
@@ -37,7 +37,7 @@ WEIGHT_DECAY: 2.0e-5
 CENTERCOMPARE: False
 RESAMPLEFLAG: False
 SAVE_DIR: checkpoints
-EXPERIENT: res50_fpn_dropout_ubFocalLoss
+EXPERIENT: res50_fpn_dropout_global_ubFocalLoss
 LOG_DIR: runs
 NUM_WORKERS: 0
 DISPLAYPORT: 8899
