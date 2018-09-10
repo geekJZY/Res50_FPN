@@ -24,6 +24,9 @@ class fpn_module(nn.Module):
         self.latlayer2 = nn.Conv2d(512, 256, kernel_size=1, stride=1, padding=0)
         self.latlayer3 = nn.Conv2d(256, 256, kernel_size=1, stride=1, padding=0)
 
+        #drop out
+        self.dropout = nn.Dropout()
+
         # Classify layers
         self.classify = nn.Conv2d(128*4, numClass, kernel_size=3, stride=1, padding=1)
 
@@ -65,7 +68,7 @@ class fpn_module(nn.Module):
         p3 = self.smooth3_2(self.smooth3_1(p3))
         p2 = self.smooth4_2(self.smooth4_1(p2))
         # Classify
-        output = self.classify(self._concatenate(p5, p4, p3, p2))
+        output = self.classify(self.dropout(self._concatenate(p5, p4, p3, p2)))
 
         return output
 
@@ -81,8 +84,11 @@ class fpn(nn.Module):
 
         # init fpn
         for m in self.fpn.children():
-            nn.init.normal_(m.weight, mean=0, std=0.01)
-            nn.init.constant_(m.bias, 0)
+            if isinstance(m, nn.Conv2d):
+                nn.init.normal_(m.weight, mean=0, std=0.01)
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+
 
     def forward(self, x):
         # Top-down

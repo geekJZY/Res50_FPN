@@ -53,6 +53,9 @@ def main():
     model = fpn(CONFIG.N_CLASSES)
     model = nn.DataParallel(model)
 
+    #testByPatch paras
+    testPatch = 508
+    testOverlap = 120
     for i in range(30,31,5):
         load_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
         model.to(device)
@@ -84,9 +87,13 @@ def main():
                 print("Process img%d" % i)
                 # Image
                 data = data.to(device)
-
-                # Propagate forward
-                output = model(data)
+                b, _, w, h = data.size()
+                output = torch.zeros([b, CONFIG.N_CLASSES, w//4, h//4], dtype=torch.float32, device=device)
+                for patchX in range(0, CONFIG.INSIZE-testPatch+1, testPatch-testOverlap):
+                    for patchY in range(0, CONFIG.INSIZE - testPatch + 1, testPatch - testOverlap):
+                        # Propagate forward
+                        output[:, :, patchX//4: (patchX+testPatch)//4, patchY//4:(patchY+testPatch)//4] += \
+                            model(data[:, :, patchX:patchX+testPatch, patchY:patchY+testPatch])
 
                 # Resize target for {100%, 75%, 50%, Max} outputs
                 outImg = cv2.resize(output[0].to("cpu").max(0)[1].numpy(), (target.shape[1],) * 2, interpolation=
@@ -100,7 +107,7 @@ def main():
                 #     cv2.imwrite(osp.join(save_dir, "label" + str(i) + ".png"), cv2.cvtColor(classToRGB(target[0].to("cpu")),
                 #                                                                             cv2.COLOR_RGB2BGR))
                 # metric computer
-                hist += label_accuracy_hist(target[0, 60:-60, 60: -60].to("cpu").numpy(), outImg[60: -60, 60: -60], 7)
+                hist += label_accuracy_hist(target[0].to("cpu").numpy(), outImg, 7)
                 # if i % 10 == 0:
                     # visualizer
                     # vis.displayImg(inputImgTransBack(data), classToRGB(outImg),

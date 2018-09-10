@@ -47,7 +47,7 @@ def RGB_mapping_to_class(label):
     return classmap
 
 
-def classToRGB(label):
+def classToRGB(label, outformat="tensor"):
     l, w = label.shape[0], label.shape[1]
     colmap = np.zeros(shape=(l, w, 3))
     indices = np.where(label == 1)
@@ -67,7 +67,10 @@ def classToRGB(label):
     transform = ToTensor();
     #     plt.imshow(colmap)
     #     plt.show()
-    return transform(colmap)
+    if outformat == "tensor":
+        return transform(colmap)
+    else:
+        return  colmap.astype(np.uint8)
 
 
 def class_to_target(inputs, numClass):
@@ -94,13 +97,14 @@ def inputImgTransBack(inputs):
     image[0] = image[0] + 0.3964
     image[1] = image[1] + 0.3695
     image[2] = image[2] + 0.2726
-    return (image.numpy() * 255).transpose(1, 2, 0)
+    #(image.numpy() * 255).transpose(1, 2, 0)
+    return image
 
 
 class MultiDataSet(data.Dataset):
     """input and label image dataset"""
 
-    def __init__(self, root, cropSize, inSize, phase="train", labelExtension='.png', testFlag=False, preload=True):
+    def __init__(self, root, cropSize, inSize, phase="train", labelExtension='.png', testFlag=False, final=False, preload=True):
         super(MultiDataSet, self).__init__()
         """
         Args:
@@ -118,6 +122,7 @@ class MultiDataSet(data.Dataset):
         self.labelExtension = labelExtension
         self.testFlag = testFlag
         self.preload = preload
+        self.final = final
         self.image_filenames = [image_name for image_name in listdir(self.fileDir + '/Sat') if
                                 is_image_file(image_name)]
         if self.preload:
@@ -137,13 +142,17 @@ class MultiDataSet(data.Dataset):
             #label = cv2.cvtColor(labelsample, cv2.COLOR_BGR2RGB)
             timeRead = time.time()
             #label = RGB_mapping_to_class(label)
-            label = scipy.io.loadmat(join(self.fileDir, 'Notification/' +
-                                          self.image_filenames[index].replace('_sat.jpg', '_mask.mat')))["label"]
+            if not self.final:
+                label = scipy.io.loadmat(join(self.fileDir, 'Notification/' +
+                                              self.image_filenames[index].replace('_sat.jpg', '_mask.mat')))["label"]
             timeLabelTrans = time.time()
         else:
             image = self.images[index]
             label = self.labels[index]
-        image, label = self._transform(image, label)
+        if not self.final:
+            image, label = self._transform(image, label)
+        else:
+            image = self._transform(image)
         # imageLowReso = cv2.resize(
         #     image,
         #     (512, 512),
@@ -159,28 +168,46 @@ class MultiDataSet(data.Dataset):
         timeFinish = time.time()
         # print("timeRead is %.2f \n timeLabelTrans is %.2f \n timeLabelTrans is %.2f \n" %
         #       (timeRead - timeStart, timeLabelTrans - timeRead, timeFinish - timeLabelTrans))
-        return image.astype(np.float32), label.astype(np.int64)
+        if not self.final:
+            return image.astype(np.float32), label.astype(np.int64)
+        else:
+            return image.astype(np.float32), self.image_filenames[index].replace("_sat.jpg", "_mask.png")
 
-    def _transform(self, image, label):
+    def _transform(self, image, label=None):
         # Scaling
         # scale_factor = random.uniform(1, 2)
         # scale = math.ceil(scale_factor * self.cropSize)
         #
-        image = cv2.resize(
-            image,
-            (self.inSize, self.inSize),
-            interpolation=cv2.INTER_LINEAR,
-        )
+        if self.inSize != 2448:
+            image = cv2.resize(
+                image,
+                (self.inSize, self.inSize),
+                interpolation=cv2.INTER_LINEAR,
+            )
 
-        if not self.testFlag:
-            h, w, _ = image.shape
-            if self.inSize != self.cropSize:
+        if not (self.testFlag or self.final):
+            if self.inSize != 2448 and self.inSize != self.cropSize:
+                    label = cv2.resize(
+                        label,
+                        (self.inSize, self.inSize),
+                        interpolation=cv2.INTER_NEAREST,
+                    )
+
+            #scale
+            if self.inSize == 2448 and self.cropSize < 2448:
+                scaleSize = int(random.uniform(0.6, 1.4) * 2448)
+                image = cv2.resize(
+                    image,
+                    (scaleSize, scaleSize),
+                    interpolation=cv2.INTER_NEAREST
+                )
                 label = cv2.resize(
                     label,
-                    (self.inSize, self.inSize),
+                    (scaleSize, scaleSize),
                     interpolation=cv2.INTER_NEAREST,
                 )
 
+            h, w, _ = image.shape
             # Crop
             w_offset = random.randint(0, max(0, w - self.cropSize - 1))
             h_offset = random.randint(0, max(0, h - self.cropSize - 1))
@@ -199,8 +226,10 @@ class MultiDataSet(data.Dataset):
             if random.random() < 0.5:
                 image = np.fliplr(image).copy()  # HWC
                 label = np.fliplr(label).copy()  # HW
-
-        return image, label
+        if not self.final:
+            return image, label
+        else:
+            return image
 
     def _pre_load(self):
         print("preloading images and labels")

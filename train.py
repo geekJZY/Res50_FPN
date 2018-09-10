@@ -16,8 +16,9 @@ from addict import Dict
 from tqdm import tqdm
 from utils.visualizer import Visualizer
 from data.data_loading import *
-from models.fpnLowReso import fpn
+from models.fpn import fpn
 from utils.loss import CrossEntropyLoss2d, SoftCrossEntropyLoss2d, FocalLoss
+from utils.metric import label_accuracy_hist, hist_to_score
 
 
 def load_network(saveDir, network, network_label, epoch_label):
@@ -49,6 +50,29 @@ def resize_target(target, size):
     return new_target
 
 
+def test(device, dataloader, model, logFile):
+    torch.set_grad_enabled(False)
+    model.eval()
+
+    hist = np.zeros((7, 7))
+    for i, (data, target) in enumerate(dataloader):
+        # Image
+        data = data.to(device)
+        # Propagate forward
+        output = model(data)
+        outImg = cv2.resize(output[0].to("cpu").max(0)[1].numpy(), (target.shape[1],) * 2, interpolation=
+        cv2.INTER_NEAREST)
+        hist += label_accuracy_hist(target.to("cpu").numpy(), outImg, 7)
+
+    _, acc_cls, recall_cls, iu, _ = hist_to_score(hist)
+    print("accuracy of every class is {}, recall of every class is {}, iu of every class is {}".format(
+        acc_cls, recall_cls, iu), file=open(logFile, "a"))
+    print("mean iu is {}".format(np.nansum(iu[1:]) / 6), file=open(logFile, "a"))
+    torch.set_grad_enabled(True)
+    model.train()
+    return np.nansum(iu[1:]) / 6
+
+
 def main():
     config = "config/cocostuff.yaml"
     cuda = True
@@ -64,6 +88,9 @@ def main():
     CONFIG = Dict(yaml.load(open(config)))
     CONFIG.SAVE_DIR = osp.join(CONFIG.SAVE_DIR, CONFIG.EXPERIENT)
     CONFIG.LOGNAME = osp.join(CONFIG.SAVE_DIR, "log.txt")
+    x_test = torch.FloatTensor([])
+    y_train = torch.FloatTensor([])
+    y_vali = torch.FloatTensor([])
 
     # Dataset
     dataset = MultiDataSet(
@@ -86,15 +113,42 @@ def main():
     )
     loader_iter = iter(loader)
 
+    datasetTestVali = MultiDataSet(
+        CONFIG.ROOT,
+        CONFIG.CROPSIZE,
+        CONFIG.INSIZE,
+        phase="crossvali",
+        testFlag=True,
+        preload=False
+    )
+
+    # DataLoader
+    loaderTestVali = torch.utils.data.DataLoader(
+        dataset=datasetTestVali,
+        batch_size=1,
+        num_workers=CONFIG.NUM_WORKERS,
+        shuffle=False,
+    )
+
+    datasetTestTrain = MultiDataSet(
+        CONFIG.ROOT,
+        CONFIG.CROPSIZE,
+        CONFIG.INSIZE,
+        phase="train",
+        testFlag=True,
+        preload=False
+    )
+
+    # DataLoader
+    loaderTestTrain = torch.utils.data.DataLoader(
+        dataset=datasetTestTrain,
+        batch_size=1,
+        num_workers=CONFIG.NUM_WORKERS,
+        shuffle=False,
+    )
+
     # Model
     model = fpn(CONFIG.N_CLASSES)
-    model = nn.DataParallel(model)
-
-    # read old version
-    if CONFIG.ITER_START != 1:
-        load_network(CONFIG.SAVE_DIR, model, "SateDeepLab", "latest")
-        print("load previous model succeed, training start from iteration {}".format(CONFIG.ITER_START))
-    model.to(device)
 
     # Optimizer
     optimizer = {
@@ -111,12 +165,19 @@ def main():
         )
     }.get(CONFIG.OPTIMIZER)
 
+    # read old version
+    model = nn.DataParallel(model)
+    if CONFIG.ITER_START != 1:
+        load_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
+        print("load previous model succeed, training start from iteration {}".format(CONFIG.ITER_START))
+    model.to(device)
+
     # Loss definition
-    criterion = FocalLoss(device, gamma=2)
+    criterion = FocalLoss(device, gamma=3)
     criterion.to(device)
 
     #visualizer
-    # vis = Visualizer(CONFIG.DISPLAYPORT)
+    vis = Visualizer(CONFIG.DISPLAYPORT, CONFIG.EXPERIENT)
 
     model.train()
     iter_start_time = time.time()
@@ -181,7 +242,7 @@ def main():
             target_ = target_.to(device)
             # Compute crossentropy loss
             if CONFIG.CENTERCOMPARE:
-                loss += criterion(output[:,:,120:-120,120:-120], target_[:,120:-120,120:-120])
+                loss += criterion(output[:,:,60:-60,60:-60], target_[:,60:-60,60:-60])
             else:
                 loss += criterion(output, target_)
             # Backpropagate (just compute gradients wrt the loss)
@@ -196,19 +257,29 @@ def main():
         if iteration % CONFIG.ITER_TF == 0:
             print("itr {}, loss is {}".format(iteration, iter_loss), file=open(CONFIG.LOGNAME, "a"))  #
             # print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/iteration))
-            # vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
-            # vis.displayImg(inputImgTransBack(data), classToRGB(outputs[3][0].to("cpu").max(0)[1]),
-            #                classToRGB(target[0].to("cpu")))
+
+        if iteration % 100 == 0:
+            vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
+            vis.displayImg(inputImgTransBack(data), classToRGB(output[0].to("cpu").max(0)[1]),
+                           classToRGB(target_[0].to("cpu")))
         # Save a model
         if iteration % CONFIG.ITER_SNAP == 0:
             save_network(CONFIG.SAVE_DIR, model, "SateFPN", iteration)
 
         # Save a model
-        if iteration % 100 == 0:
+        if iteration % 500 == 0:
             save_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
 
-    save_network(CONFIG.SAVE_DIR, model, "SateFPN", "final")
-
+        # test a model
+        if (iteration + 1) % 5000 == 0:
+            x_test = torch.cat((x_test, torch.FloatTensor([iteration])))
+            print("test in trainset", file=open(CONFIG.LOGNAME, "a"))
+            mIOU = test(device, loaderTestTrain, model, CONFIG.LOGNAME)
+            y_train = torch.cat((y_train, torch.FloatTensor([mIOU])))
+            print("test in validationset", file=open(CONFIG.LOGNAME, "a"))
+            mIOU = test(device, loaderTestVali, model, CONFIG.LOGNAME)
+            y_vali = torch.cat((y_vali, torch.FloatTensor([mIOU])))
+            vis.drawTestLine(x_test, y_vali, y_train)
 
 if __name__ == "__main__":
     main()

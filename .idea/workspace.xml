@@ -2,11 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e31854a-662b-474f-bef9-d3134fae55d1" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/testByPatch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/writeImg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/cocostuff.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/cocostuff.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/data_loading.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/data_loading.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/fpn.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/fpn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/visualizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/visualizer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,20 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="jobSubmit.slurm" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jobSubmit.slurm">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="21" column="13" selection-start-line="8" selection-start-column="15" selection-end-line="21" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="fpn.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/fpn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="76" column="30" selection-start-line="76" selection-start-column="22" selection-end-line="76" selection-end-column="30" />
+            <state relative-caret-position="1936">
+              <caret line="91" selection-start-line="91" selection-end-line="91" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -38,23 +34,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fpnLowReso.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/fpnLowReso.py">
+      <file leaf-file-name="writeImg.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/writeImg.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1518">
-              <caret line="72" column="64" selection-start-line="72" selection-start-column="64" selection-end-line="72" selection-end-column="64" />
+            <state relative-caret-position="1078">
+              <caret line="62" column="23" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="23" />
               <folding>
-                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#39#103#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="testSimpleEnsemble.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testSimpleEnsemble.py">
+      <file leaf-file-name="resnet.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/resnet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1320">
-              <caret line="73" column="26" selection-start-line="73" selection-start-column="10" selection-end-line="73" selection-end-column="26" />
+            <state relative-caret-position="2728">
+              <caret line="126" column="54" selection-start-line="126" selection-start-column="48" selection-end-line="126" selection-end-column="54" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/train.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="66">
+              <caret line="153" column="17" lean-forward="true" selection-start-line="153" selection-start-column="17" selection-end-line="153" selection-end-column="17" />
               <folding>
                 <element signature="e#39#103#0" expanded="true" />
               </folding>
@@ -65,17 +70,47 @@
       <file leaf-file-name="loss.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/loss.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="8" column="70" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="70" />
+            <state relative-caret-position="264">
+              <caret line="14" column="11" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="11" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/train.py">
+      <file leaf-file-name="visualizer.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utils/visualizer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="150" column="24" lean-forward="true" selection-start-line="150" selection-start-column="24" selection-end-line="150" selection-end-column="24" />
+            <state relative-caret-position="462">
+              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data_loading.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/data_loading.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4290">
+              <caret line="207" column="17" lean-forward="true" selection-start-line="207" selection-start-column="17" selection-end-line="207" selection-end-column="17" />
+              <folding>
+                <element signature="e#18#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cocostuff.yaml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config/cocostuff.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="39" column="40" selection-start-line="39" selection-start-column="11" selection-end-line="39" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="testByPatch.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testByPatch.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2156">
+              <caret line="111" column="25" selection-start-line="111" selection-start-column="22" selection-end-line="111" selection-end-column="25" />
               <folding>
                 <element signature="e#39#103#0" expanded="true" />
               </folding>
@@ -86,44 +121,11 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1364">
-              <caret line="75" column="32" selection-start-line="75" selection-start-column="23" selection-end-line="75" selection-end-column="32" />
+            <state relative-caret-position="1166">
+              <caret line="66" column="32" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="32" />
               <folding>
                 <element signature="e#39#103#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data_loading.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/data_loading.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="302">
-              <caret line="154" column="40" lean-forward="true" selection-start-line="154" selection-start-column="40" selection-end-line="154" selection-end-column="40" />
-              <folding>
-                <element signature="e#18#40#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/crf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cocostuff.yaml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/config/cocostuff.yaml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -139,10 +141,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>init_weights</find>
-      <find>nn.Conv2d</find>
       <find>SateDeepLab</find>
-      <find>self.mean</find>
       <find>batchSizeResample</find>
       <find>transpose</find>
       <find>cvtColor</find>
@@ -156,13 +155,22 @@
       <find>deconvlotion</find>
       <find>print</find>
       <find>data</find>
-      <find>vis</find>
       <find>noisy_image_filenames</find>
       <find>SAVE</find>
       <find>parall</find>
       <find>resiz</find>
       <find>cli</find>
       <find>Visualizer</find>
+      <find>model.train</find>
+      <find>saveDir</find>
+      <find>Satsample</find>
+      <find>inputImgTransBack</find>
+      <find>line</find>
+      <find>vis</find>
+      <find>deep</find>
+      <find>self.mean</find>
+      <find>FocalLoss</find>
+      <find>sgd</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -173,7 +181,6 @@
       <list>
         <option value="$PROJECT_DIR$/utils/crf.py" />
         <option value="$PROJECT_DIR$/utils/metric.py" />
-        <option value="$PROJECT_DIR$/utils/visualizer.py" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/list_file/test_list" />
         <option value="$PROJECT_DIR$/list_file/train_list" />
@@ -185,10 +192,13 @@
         <option value="$PROJECT_DIR$/jobSubmit.slurm" />
         <option value="$PROJECT_DIR$/models/fpnLowReso.py" />
         <option value="$PROJECT_DIR$/utils/__init__.py" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/testSimpleEnsemble.py" />
-        <option value="$PROJECT_DIR$/models/fpn.py" />
+        <option value="$PROJECT_DIR$/testByPatch.py" />
+        <option value="$PROJECT_DIR$/utils/visualizer.py" />
+        <option value="$PROJECT_DIR$/writeImg.py" />
+        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/data/data_loading.py" />
+        <option value="$PROJECT_DIR$/models/fpn.py" />
         <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/config/cocostuff.yaml" />
       </list>
@@ -204,10 +214,10 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="549" />
-    <option name="y" value="294" />
-    <option name="width" value="906" />
-    <option name="height" value="744" />
+    <option name="x" value="731" />
+    <option name="y" value="314" />
+    <option name="width" value="904" />
+    <option name="height" value="708" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -215,6 +225,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -246,7 +257,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -282,25 +292,25 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5212938" side_tool="true" visible="true" weight="0.5185185" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.52991915" side_tool="true" visible="true" weight="0.46090534" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="File Transfer" order="7" sideWeight="0.4787062" visible="true" weight="0.5185185" />
+      <window_info anchor="bottom" id="File Transfer" order="7" sideWeight="0.47008085" visible="true" weight="0.46090534" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13530998" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1342318" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -328,27 +338,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1628">
-          <caret line="87" column="17" lean-forward="true" selection-start-line="87" selection-start-column="17" selection-end-line="87" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/cocostuff.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="28" column="9" lean-forward="true" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/visualizer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="13" selection-start-column="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jobSubmit.slurm">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -589,64 +578,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/visualizer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="17" column="37" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/resnet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2728">
-          <caret line="126" column="54" selection-start-line="126" selection-start-column="48" selection-end-line="126" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/loss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="8" column="70" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/fpnLowReso.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1518">
-          <caret line="72" column="64" selection-start-line="72" selection-start-column="64" selection-end-line="72" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/crf.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
           <caret line="10" selection-start-line="10" selection-end-line="10" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1364">
-          <caret line="75" column="32" selection-start-line="75" selection-start-column="23" selection-end-line="75" selection-end-column="32" />
-          <folding>
-            <element signature="e#39#103#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testSimpleEnsemble.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="73" column="26" selection-start-line="73" selection-start-column="10" selection-end-line="73" selection-end-column="26" />
-          <folding>
-            <element signature="e#39#103#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -657,30 +592,102 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/fpn.py">
+    <entry file="file://$PROJECT_DIR$/models/fpnLowReso.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="76" column="30" selection-start-line="76" selection-start-column="22" selection-end-line="76" selection-end-column="30" />
+        <state relative-caret-position="1562">
+          <caret line="74" column="35" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/metric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="11" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testSimpleEnsemble.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1320">
+          <caret line="73" column="26" selection-start-line="73" selection-start-column="10" selection-end-line="73" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testByPatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2156">
+          <caret line="111" column="25" selection-start-line="111" selection-start-column="22" selection-end-line="111" selection-end-column="25" />
           <folding>
-            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#39#103#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/resnet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2728">
+          <caret line="126" column="54" selection-start-line="126" selection-start-column="48" selection-end-line="126" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/visualizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/writeImg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1078">
+          <caret line="62" column="23" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="23" />
+          <folding>
+            <element signature="e#39#103#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/data_loading.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="154" column="40" lean-forward="true" selection-start-line="154" selection-start-column="40" selection-end-line="154" selection-end-column="40" />
+        <state relative-caret-position="4290">
+          <caret line="207" column="17" lean-forward="true" selection-start-line="207" selection-start-column="17" selection-end-line="207" selection-end-column="17" />
           <folding>
             <element signature="e#18#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/utils/loss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="14" column="11" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/fpn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1936">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1166">
+          <caret line="66" column="32" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="32" />
+          <folding>
+            <element signature="e#39#103#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="150" column="24" lean-forward="true" selection-start-line="150" selection-start-column="24" selection-end-line="150" selection-end-column="24" />
+        <state relative-caret-position="66">
+          <caret line="153" column="17" lean-forward="true" selection-start-line="153" selection-start-column="17" selection-end-line="153" selection-end-column="17" />
           <folding>
             <element signature="e#39#103#0" expanded="true" />
           </folding>
@@ -689,8 +696,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/cocostuff.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        <state relative-caret-position="270">
+          <caret line="39" column="40" selection-start-line="39" selection-start-column="11" selection-end-line="39" selection-end-column="40" />
         </state>
       </provider>
     </entry>
