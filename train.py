@@ -62,7 +62,7 @@ def test(device, dataloader, model, logFile):
         output = model(data)
         outImg = cv2.resize(output[0].to("cpu").max(0)[1].numpy(), (target.shape[1],) * 2, interpolation=
         cv2.INTER_NEAREST)
-        hist += label_accuracy_hist(target.to("cpu").numpy(), outImg, 7)
+        hist += label_accuracy_hist(target[0].to("cpu").numpy(), outImg, 7)
 
     _, acc_cls, recall_cls, iu, _ = hist_to_score(hist)
     print("accuracy of every class is {}, recall of every class is {}, iu of every class is {}".format(

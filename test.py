@@ -100,7 +100,7 @@ def main():
                 #     cv2.imwrite(osp.join(save_dir, "label" + str(i) + ".png"), cv2.cvtColor(classToRGB(target[0].to("cpu")),
                 #                                                                             cv2.COLOR_RGB2BGR))
                 # metric computer
-                hist += label_accuracy_hist(target[0, 60:-60, 60: -60].to("cpu").numpy(), outImg[60: -60, 60: -60], 7)
+                hist += label_accuracy_hist(target[0].to("cpu").numpy(), outImg, 7)
                 # if i % 10 == 0:
                     # visualizer
                     # vis.displayImg(inputImgTransBack(data), classToRGB(outImg),
