@@ -53,7 +53,7 @@ def main():
     model = fpn(CONFIG.N_CLASSES)
     model = nn.DataParallel(model)
 
-    load_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
+    load_network(CONFIG.SAVE_DIR, model, "SateFPN", "10000")
     model.to(device)
     model.eval()
 
