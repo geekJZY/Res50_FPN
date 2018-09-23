@@ -17,7 +17,7 @@ from tqdm import tqdm
 from utils.visualizer import Visualizer
 from data.data_loading import *
 from models.fpn import fpn
-from utils.loss import lovasz_softmax, FocalLoss
+from utils.loss import lovasz_softmax
 from utils.metric import label_accuracy_hist, hist_to_score
 
 
@@ -174,7 +174,6 @@ def main():
 
     # Loss definition
     criterion = lovasz_softmax
-    criterion_focal = FocalLoss(device, gamma=6)
 
     #visualizer
     vis = Visualizer(CONFIG.DISPLAYPORT, CONFIG.EXPERIENT)
@@ -244,7 +243,7 @@ def main():
             if CONFIG.CENTERCOMPARE:
                 loss += criterion(output[:,:,60:-60,60:-60], target_[:,60:-60,60:-60])
             else:
-                loss += criterion(output, target_) + 0.5 * criterion_focal(output, target_)
+                loss += criterion(output, target_)
             # Backpropagate (just compute gradients wrt the loss)
             loss /= float(CONFIG.ITER_SIZE)
             loss.backward()
