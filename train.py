@@ -17,7 +17,7 @@ from tqdm import tqdm
 from utils.visualizer import Visualizer
 from data.data_loading import *
 from models.fpn import fpn
-from utils.loss import CrossEntropyLoss2d, SoftCrossEntropyLoss2d, FocalLoss
+from utils.loss import lovasz_softmax, FocalLoss
 from utils.metric import label_accuracy_hist, hist_to_score
 
 
@@ -173,8 +173,8 @@ def main():
     model.to(device)
 
     # Loss definition
-    criterion = FocalLoss(device, gamma=3)
-    criterion.to(device)
+    criterion = lovasz_softmax
+    criterion_focal = FocalLoss(device, gamma=6)
 
     #visualizer
     vis = Visualizer(CONFIG.DISPLAYPORT, CONFIG.EXPERIENT)
@@ -244,7 +244,7 @@ def main():
             if CONFIG.CENTERCOMPARE:
                 loss += criterion(output[:,:,60:-60,60:-60], target_[:,60:-60,60:-60])
             else:
-                loss += criterion(output, target_)
+                loss += criterion(output, target_) + 0.5 * criterion_focal(output, target_)
             # Backpropagate (just compute gradients wrt the loss)
             loss /= float(CONFIG.ITER_SIZE)
             loss.backward()
@@ -258,7 +258,7 @@ def main():
             print("itr {}, loss is {}".format(iteration, iter_loss), file=open(CONFIG.LOGNAME, "a"))  #
             # print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/iteration))
 
-        if iteration % 100 == 0:
+        if iteration % 5 == 0:
             vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
             vis.displayImg(inputImgTransBack(data), classToRGB(output[0].to("cpu").max(0)[1]),
                            classToRGB(target_[0].to("cpu")))
@@ -267,7 +267,7 @@ def main():
             save_network(CONFIG.SAVE_DIR, model, "SateFPN", iteration)
 
         # Save a model
-        if iteration % 500 == 0:
+        if iteration % 200 == 0:
             save_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
 
         # test a model

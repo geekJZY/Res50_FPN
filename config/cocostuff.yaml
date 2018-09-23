@@ -1,5 +1,5 @@
 DATASET: cocostuff
-ROOT: /hdd1/ziyu/data
+ROOT: /vita1_hdd1/ziyu/data
 LABELS: ./data/datasets/cocostuff/labels_2.txt
 
 IMAGE:
@@ -18,16 +18,16 @@ PYRAMIDS: [6, 12, 18, 24]
 
 # Training setting
 CROPSIZE: 508
-INSIZE: 508  # Max size is 2448
+INSIZE: 2448  # Max size is 2448
 BATCH_SIZE: 10
 IGNORE_LABEL: -1
-ITER_START: 4500
+ITER_START: 1
 ITER_MAX: 20000
 ITER_SIZE: 1
 ITER_SNAP: 2500
 ITER_TF: 1
 LR_DECAY: 10
-LR: 0.0001
+LR: 0.001
 MOMENTUM: 0.9
 OPTIMIZER: sgd
 POLY_POWER: 0.9
@@ -37,7 +37,7 @@ WEIGHT_DECAY: 2.0e-5
 CENTERCOMPARE: False
 RESAMPLEFLAG: False
 SAVE_DIR: checkpoints
-EXPERIENT: res50_fpn_dropout_global_ubFocalLoss
+EXPERIENT: res50_fpn_lovasz_focal
 LOG_DIR: runs
 NUM_WORKERS: 0
 DISPLAYPORT: 8899
