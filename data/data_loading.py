@@ -143,8 +143,9 @@ class MultiDataSet(data.Dataset):
             timeRead = time.time()
             #label = RGB_mapping_to_class(label)
             if not self.final:
-                label = scipy.io.loadmat(join(self.fileDir, 'Notification/' +
-                                              self.image_filenames[index].replace('_sat.jpg', '_mask.mat')))["label"]
+                label = cv2.imread(join(self.fileDir, 'Notification/' +
+                                        self.image_filenames[index].replace('_sat.jpg', '_mask.png')), 0).astype(np.int64)
+
             timeLabelTrans = time.time()
         else:
             image = self.images[index]

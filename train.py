@@ -197,6 +197,7 @@ def main():
 
         iter_loss = 0
         for i in range(1, CONFIG.ITER_SIZE + 1):
+            clDataStart = time.time()
             if not CONFIG.RESAMPLEFLAG:
                 try:
                     data, target = next(loader_iter)
@@ -205,7 +206,6 @@ def main():
                     data, target = next(loader_iter)
             else:
                 cntFrame = 0
-                clDataStart = time.time()
                 clCnt = 0
                 while cntFrame < batchSizeResample:
                     clCnt += 1
@@ -226,7 +226,7 @@ def main():
                             target = torch.cat([target, targetOne])
                         cntFrame += 1
                 print("collate data takes %.2f sec, collect %d time" % (time.time() - clDataStart, clCnt))
-
+            clDataTime = time.time() - clDataStart
             # Image
             data = data.to(device)
 
@@ -256,7 +256,8 @@ def main():
         # Visualizer and Summery Writer
         if iteration % CONFIG.ITER_TF == 0:
             print("itr {}, loss is {}".format(iteration, iter_loss), file=open(CONFIG.LOGNAME, "a"))  #
-            # print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/iteration))
+            print("time taken for each iter is %.3f, data collection take %.3f" %
+                  ((time.time() - iter_start_time)/(iteration-CONFIG.ITER_START+1), clDataTime))
 
         if iteration % 5 == 0:
             vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
