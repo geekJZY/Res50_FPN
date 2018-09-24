@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="vita2">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="jiang">
     <serverData>
+      <paths name="jiang">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/sdb/jiangziyu/Res50_FPN/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="vita1">
         <serverdata>
           <mappings>

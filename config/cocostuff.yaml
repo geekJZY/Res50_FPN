@@ -1,5 +1,5 @@
 DATASET: cocostuff
-ROOT: /vita1_hdd1/ziyu/data
+ROOT: /mnt/sdb/jiangziyu/data
 LABELS: ./data/datasets/cocostuff/labels_2.txt
 
 IMAGE:
@@ -21,7 +21,7 @@ CROPSIZE: 508
 INSIZE: 2448  # Max size is 2448
 BATCH_SIZE: 10
 IGNORE_LABEL: -1
-ITER_START: 1
+ITER_START: 16800
 ITER_MAX: 20000
 ITER_SIZE: 1
 ITER_SNAP: 2500

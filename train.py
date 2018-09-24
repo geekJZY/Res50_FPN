@@ -255,7 +255,7 @@ def main():
         # Visualizer and Summery Writer
         if iteration % CONFIG.ITER_TF == 0:
             print("itr {}, loss is {}".format(iteration, iter_loss), file=open(CONFIG.LOGNAME, "a"))  #
-            # print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/iteration))
+            print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/(iteration-CONFIG.ITER_START+1)))
 
         if iteration % 5 == 0:
             vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
