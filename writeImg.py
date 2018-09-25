@@ -12,6 +12,7 @@ import yaml
 from addict import Dict
 from data.data_loading import *
 from models.fpn import fpn
+import click
 # from models.fcn import FCN8
 # from utils.visualizer import Visualizer
 from utils.metric import label_accuracy_hist, hist_to_score
@@ -31,8 +32,9 @@ def save_network(saveDir, network, network_label, epoch_label):
     if torch.cuda.is_available():
         network.cuda()
 
-
-def main():
+@click.command()
+@click.option("--epoch", type=str, default="latest")
+def main(epoch):
     config = "config/cocostuff.yaml"
     cuda = True
     device = torch.device("cuda" if cuda and torch.cuda.is_available() else "cpu")
@@ -53,7 +55,7 @@ def main():
     model = fpn(CONFIG.N_CLASSES)
     model = nn.DataParallel(model)
 
-    load_network(CONFIG.SAVE_DIR, model, "SateFPN", "15000")
+    load_network(CONFIG.SAVE_DIR, model, "SateFPN", epoch)
     model.to(device)
     model.eval()
 
