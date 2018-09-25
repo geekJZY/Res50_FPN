@@ -178,12 +178,6 @@ class MultiDataSet(data.Dataset):
         # scale_factor = random.uniform(1, 2)
         # scale = math.ceil(scale_factor * self.cropSize)
         #
-        if self.inSize != 2448:
-            image = cv2.resize(
-                image,
-                (self.inSize, self.inSize),
-                interpolation=cv2.INTER_LINEAR,
-            )
 
         if not (self.testFlag or self.final):
             if self.inSize != 2448 and self.inSize != self.cropSize:
@@ -201,7 +195,7 @@ class MultiDataSet(data.Dataset):
             image = cv2.resize(
                 image,
                 (scaleSize, scaleSize),
-                interpolation=cv2.INTER_NEAREST
+                interpolation=cv2.INTER_LINEAR
             )
             label = cv2.resize(
                 label,

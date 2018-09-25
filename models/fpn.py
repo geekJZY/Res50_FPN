@@ -32,9 +32,9 @@ class fpn_module(nn.Module):
 
     def _concatenate(self, p5, p4, p3, p2):
         _, _, H, W = p2.size()
-        p5 = F.upsample(p5, size=(H, W), mode='bilinear')
-        p4 = F.upsample(p4, size=(H, W), mode='bilinear')
-        p3 = F.upsample(p3, size=(H, W), mode='bilinear')
+        p5 = F.interpolate(p5, size=(H, W), mode='bilinear')
+        p4 = F.interpolate(p4, size=(H, W), mode='bilinear')
+        p3 = F.interpolate(p3, size=(H, W), mode='bilinear')
         return torch.cat([p5, p4, p3, p2], dim=1)
 
     def _upsample_add(self, x, y):
@@ -69,6 +69,7 @@ class fpn_module(nn.Module):
         p2 = self.smooth4_2(self.smooth4_1(p2))
         # Classify
         output = self.classify(self.dropout(self._concatenate(p5, p4, p3, p2)))
+        output = F.interpolate(output, [c2.size()[2]*4,]*2)
 
         return output
 
