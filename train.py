@@ -168,7 +168,7 @@ def main():
     # read old version
     model = nn.DataParallel(model)
     if CONFIG.ITER_START != 1:
-        load_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
+        load_network(CONFIG.SAVE_DIR, model, "SateFPN", str(CONFIG.ITER_START))
         print("load previous model succeed, training start from iteration {}".format(CONFIG.ITER_START))
     model.to(device)
 
@@ -180,7 +180,7 @@ def main():
 
     model.train()
     iter_start_time = time.time()
-    for iteration in range(CONFIG.ITER_START, CONFIG.ITER_MAX + 1):
+    for iteration in range(CONFIG.ITER_START+1, CONFIG.ITER_MAX + 1):
         # Set a learning rate
         poly_lr_scheduler(
             optimizer=optimizer,
@@ -255,7 +255,7 @@ def main():
         # Visualizer and Summery Writer
         if iteration % CONFIG.ITER_TF == 0:
             print("itr {}, loss is {}".format(iteration, iter_loss), file=open(CONFIG.LOGNAME, "a"))  #
-            print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/(iteration-CONFIG.ITER_START+1)))
+            print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/(iteration-CONFIG.ITER_START)))
 
         if iteration % 5 == 0:
             vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
