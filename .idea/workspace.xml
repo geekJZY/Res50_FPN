@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4e31854a-662b-474f-bef9-d3134fae55d1" name="Default" comment="" />
+    <list default="true" id="4e31854a-662b-474f-bef9-d3134fae55d1" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/writeImg.py" beforeDir="false" afterPath="$PROJECT_DIR$/writeImg.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,8 +17,8 @@
       <file leaf-file-name="writeImg.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/writeImg.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-37">
-              <caret line="33" selection-start-line="33" selection-end-line="33" />
+            <state relative-caret-position="264">
+              <caret line="69" column="19" selection-start-line="69" selection-start-column="19" selection-end-line="69" selection-end-column="19" />
               <folding>
                 <element signature="e#39#103#0" expanded="true" />
               </folding>
@@ -59,8 +62,8 @@
       <file leaf-file-name="cocostuff.yaml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/cocostuff.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="38" column="21" lean-forward="true" selection-start-line="38" selection-start-column="21" selection-end-line="38" selection-end-column="21" />
+            <state relative-caret-position="359">
+              <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -183,11 +186,11 @@
         <option value="$PROJECT_DIR$/utils/visualizer.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/utils/loss.py" />
-        <option value="$PROJECT_DIR$/writeImg.py" />
         <option value="$PROJECT_DIR$/data/data_loading.py" />
         <option value="$PROJECT_DIR$/config/cocostuff.yaml" />
         <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/writeImg.py" />
       </list>
     </option>
   </component>
@@ -288,14 +291,15 @@
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5380054" side_tool="true" visible="true" weight="0.36934155" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5336927" side_tool="true" visible="true" weight="0.28703704" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="File Transfer" order="7" sideWeight="0.46630728" visible="true" weight="0.28703704" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.099191375" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.099191375" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -321,7 +325,6 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.53318584" side_tool="true" visible="true" weight="0.7887324" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="File Transfer" order="7" sideWeight="0.46681416" visible="true" weight="0.7887324" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49973047" weight="0.32991803" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
@@ -675,8 +678,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/cocostuff.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="38" column="21" lean-forward="true" selection-start-line="38" selection-start-column="21" selection-end-line="38" selection-end-column="21" />
+        <state relative-caret-position="359">
+          <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -702,8 +705,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/writeImg.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-37">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        <state relative-caret-position="264">
+          <caret line="69" column="19" selection-start-line="69" selection-start-column="19" selection-end-line="69" selection-end-column="19" />
           <folding>
             <element signature="e#39#103#0" expanded="true" />
           </folding>
