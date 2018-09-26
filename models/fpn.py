@@ -69,7 +69,6 @@ class fpn_module(nn.Module):
         p2 = self.smooth4_2(self.smooth4_1(p2))
         # Classify
         output = self.classify(self.dropout(self._concatenate(p5, p4, p3, p2)))
-        output = F.interpolate(output, [c2.size()[2]*4,]*2)
 
         return output
 

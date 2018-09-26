@@ -37,7 +37,7 @@ WEIGHT_DECAY: 2.0e-5
 CENTERCOMPARE: False
 RESAMPLEFLAG: False
 SAVE_DIR: checkpoints
-EXPERIENT: res50_fpn_lovasz_global
+EXPERIENT: res50_fpn_lovasz_global_small
 LOG_DIR: runs
 NUM_WORKERS: 0
 DISPLAYPORT: 8899
