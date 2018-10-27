@@ -1,4 +1,5 @@
 from .resnet import resnet50, resnet101
+from .resnetWarp import resnet50 as resnet50Warp
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
@@ -68,7 +69,7 @@ class fpn_module(nn.Module):
         p3 = self.smooth3_2(self.smooth3_1(p3))
         p2 = self.smooth4_2(self.smooth4_1(p2))
         # Classify
-        output = self.classify(self.dropout(self._concatenate(p5, p4, p3, p2)))
+        output = self.classify(self._concatenate(p5, p4, p3, p2))
 
         return output
 
@@ -89,8 +90,6 @@ class fpn(nn.Module):
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
 
-
     def forward(self, x):
-        # Top-down
         c2, c3, c4, c5 = self.resnet.forward(x)
         return self.fpn.forward(c2, c3, c4, c5)

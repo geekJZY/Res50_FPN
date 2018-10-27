@@ -17,7 +17,7 @@ from tqdm import tqdm
 from utils.visualizer import Visualizer
 from data.data_loading import *
 from models.fpn import fpn
-from utils.loss import lovasz_softmax
+from utils.loss import lovasz_softmax, FocalLoss
 from utils.metric import label_accuracy_hist, hist_to_score
 
 
@@ -168,12 +168,12 @@ def main():
     # read old version
     model = nn.DataParallel(model)
     if CONFIG.ITER_START != 1:
-        load_network(CONFIG.SAVE_DIR, model, "SateFPN", str(CONFIG.ITER_START))
+        load_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
         print("load previous model succeed, training start from iteration {}".format(CONFIG.ITER_START))
     model.to(device)
 
     # Loss definition
-    criterion = lovasz_softmax
+    criterion = FocalLoss(device, gamma=2)
 
     #visualizer
     vis = Visualizer(CONFIG.DISPLAYPORT, CONFIG.EXPERIENT)
@@ -256,11 +256,11 @@ def main():
         if iteration % CONFIG.ITER_TF == 0:
             print("itr {}, loss is {}".format(iteration, iter_loss), file=open(CONFIG.LOGNAME, "a"))  #
             print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/(iteration-CONFIG.ITER_START)))
-
         if iteration % 5 == 0:
             vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
             vis.displayImg(inputImgTransBack(data), classToRGB(output[0].to("cpu").max(0)[1]),
                            classToRGB(target_[0].to("cpu")))
+
         # Save a model
         if iteration % CONFIG.ITER_SNAP == 0:
             save_network(CONFIG.SAVE_DIR, model, "SateFPN", iteration)
@@ -279,6 +279,7 @@ def main():
             mIOU = test(device, loaderTestVali, model, CONFIG.LOGNAME)
             y_vali = torch.cat((y_vali, torch.FloatTensor([mIOU])))
             vis.drawTestLine(x_test, y_vali, y_train)
+
 
 if __name__ == "__main__":
     main()

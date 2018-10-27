@@ -201,34 +201,41 @@ class MultiDataSet(data.Dataset):
             image = cv2.resize(
                 image,
                 (scaleSize, scaleSize),
-                interpolation=cv2.INTER_NEAREST
+                interpolation=cv2.INTER_LINEAR
             )
             label = cv2.resize(
                 label,
                 (scaleSize, scaleSize),
-                interpolation=cv2.INTER_NEAREST,
+                interpolation=cv2.INTER_NEAREST
             )
 
             h, w, _ = image.shape
-            # Crop
+            # Crop and Info Pad
             w_offset = random.randint(0, max(0, w - self.cropSize - 1))
             h_offset = random.randint(0, max(0, h - self.cropSize - 1))
 
-            image = image[h_offset:h_offset + self.cropSize,
-                          w_offset:w_offset + self.cropSize, :]
+            leftTop = (max(0, h_offset-213), max(0, w_offset-213))
+            rightBottom = (min(h, h_offset+self.cropSize+213), min(w, w_offset+self.cropSize+213))
+            patchZero = (h_offset-213, w_offset-213)
+            patchLeftTop = (leftTop[0]-patchZero[0], leftTop[1]-patchZero[1])
+            patchRightBottom = (rightBottom[0]-patchZero[0], rightBottom[1]-patchZero[1])
+            padImage = np.zeros((939, 939, 3), dtype=np.float32)
+            padImage[patchLeftTop[0]:patchRightBottom[0], patchLeftTop[1]:patchRightBottom[1], :] = \
+                                        image[leftTop[0]:rightBottom[0], leftTop[1]:rightBottom[1], :]
             label = label[h_offset:h_offset + self.cropSize,
                           w_offset:w_offset + self.cropSize]
-
             # Rotate
             rotate_time = np.random.randint(low=0, high=4)
-            np.rot90(image, rotate_time)
+            np.rot90(padImage, rotate_time)
             np.rot90(label, rotate_time)
 
             # Random flipping
             if random.random() < 0.5:
-                image = np.fliplr(image).copy()  # HWC
+                padImage = np.fliplr(padImage).copy()  # HWC
                 label = np.fliplr(label).copy()  # HW
-        if not self.final:
+        if not self.final and not self.testFlag:
+            return padImage, label
+        elif self.testFlag:
             return image, label
         else:
             return image

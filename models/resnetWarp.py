@@ -22,7 +22,7 @@ def centerSlice(input, sliceSize):
     else:
         startPointH = (h - sliceSize)//2
         startPointW = (w - sliceSize)//2
-        return input[:,:,startPointH:startPointH+sliceSize,startPointW:startPointW+sliceSize]
+        return input[:,:,startPointH:startPointH+sliceSize, startPointW:startPointW+sliceSize]
 
 
 class Bottleneck(nn.Module):
@@ -33,7 +33,7 @@ class Bottleneck(nn.Module):
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
         self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
-                               padding=1, bias=False)
+                               padding=0 if stride == 2 else 1, bias=False)
         self.bn2 = nn.BatchNorm2d(planes)
         self.conv3 = nn.Conv2d(planes, planes * self.expansion, kernel_size=1, bias=False)
         self.bn3 = nn.BatchNorm2d(planes * self.expansion)
@@ -69,11 +69,11 @@ class ResNet(nn.Module):
     def __init__(self, block, layers):
         self.inplanes = 64
         super(ResNet, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=0,
                                bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=0)
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
         self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
@@ -110,11 +110,11 @@ class ResNet(nn.Module):
         x = self.maxpool(x)
 
         c2 = self.layer1(x)
-        c3 = self.layer2(centerSlice(c2, 227))
-        c4 = self.layer3(centerSlice(c3, 107))
-        c5 = self.layer4(centerSlice(c4, 43))
+        c3 = self.layer2(centerSlice(c2, 219))
+        c4 = self.layer3(centerSlice(c3, 103))
+        c5 = self.layer4(centerSlice(c4, 41))
 
-        return centerSlice(c2, 129), centerSlice(c3, 65), centerSlice(c4, 33), centerSlice(c5, 17)
+        return centerSlice(c2, 135), centerSlice(c3, 67), centerSlice(c4, 33), centerSlice(c5, 16)
 
 
 def resnet50(pretrained=False, **kwargs):
