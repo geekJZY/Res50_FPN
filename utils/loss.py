@@ -70,6 +70,40 @@ class SoftCrossEntropyLoss2d(nn.Module):
                                                                                              targets.size()[3])
         return loss
 
+
+def cross_entropy2d(input, target, weight=None, size_average=True):
+    n, c, h, w = input.size()
+
+    # Handle inconsistent size between input and target
+    # resize labels
+    target = target.unsqueeze(1)
+    target = F.interpolate(target.float(), size=(h, w), mode="nearest").long()
+    target = target.squeeze(1)
+
+    input = input.transpose(1, 2).transpose(2, 3).contiguous().view(-1, c)
+    target = target.view(-1)
+    loss = F.cross_entropy(
+        input, target, weight=weight, size_average=size_average, ignore_index=250
+    )
+    return loss
+
+
+def multi_scale_cross_entropy2d(input, target, weight=None, size_average=True, scale_weight=None):
+    # Auxiliary training for PSPNet [1.0, 0.4] and ICNet [1.0, 0.4, 0.16]
+    if scale_weight == None:  # scale_weight: torch tensor type
+        n_inp = len(input)
+        scale = 0.4
+        scale_weight = torch.pow(scale * torch.ones(n_inp), torch.arange(n_inp).float())
+        if input[0].is_cuda:
+            scale_weight = scale_weight.cuda()
+
+    loss = 0.0
+    for i, inp in enumerate(input):
+        loss = loss + scale_weight[i] * cross_entropy2d(
+            input=inp, target=target, weight=weight, size_average=size_average
+        )
+
+    return loss
 # --------------------------- MULTICLASS Lovasz LOSSES ---------------------------
 
 def lovasz_grad(gt_sorted):

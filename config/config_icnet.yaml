@@ -1,0 +1,33 @@
+DATASET: cocostuff
+ROOT: /mnt/sdb/jiangziyu/data
+LABELS: ./data/datasets/cocostuff/labels_2.txt
+
+
+# Model definition
+N_CLASSES: 7
+
+# Training setting
+CROPSIZE: 513
+INSIZE: 2448  # Max size is 2448
+BATCH_SIZE: 4
+IGNORE_LABEL: -1
+ITER_START: 1
+ITER_MAX: 20000
+ITER_SIZE: 1
+ITER_SNAP: 2500
+ITER_TF: 1
+LR_DECAY: 10
+LR: 0.001
+MOMENTUM: 0.9
+OPTIMIZER: sgd
+POLY_POWER: 0.9
+WEIGHT_DECAY: 2.0e-5
+
+
+CENTERCOMPARE: False
+RESAMPLEFLAG: False
+SAVE_DIR: checkpoints
+EXPERIENT: icnet_inital
+LOG_DIR: runs
+NUM_WORKERS: 4
+DISPLAYPORT: 8899

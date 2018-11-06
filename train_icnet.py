@@ -16,7 +16,7 @@ from addict import Dict
 from tqdm import tqdm
 from utils.visualizer import Visualizer
 from data.data_loading import *
-from models.fpn import fpn
+from models.icnet import icnet
 from utils.loss import lovasz_softmax
 from utils.metric import label_accuracy_hist, hist_to_score
 
@@ -50,19 +50,33 @@ def resize_target(target, size):
     return new_target
 
 
-def test(device, dataloader, model, logFile):
+def test(device, dataloader, model, logFile, num_class=7, cropsize=513):
     torch.set_grad_enabled(False)
-    model.eval()
+    model.train()
 
-    hist = np.zeros((7, 7))
+    hist = np.zeros((num_class, num_class))
     for i, (data, target) in enumerate(dataloader):
+        print("process image {}".format(i))
         # Image
         data = data.to(device)
-        # Propagate forward
-        output = model(data)
-        outImg = cv2.resize(output[0].to("cpu").max(0)[1].numpy(), (target.shape[1],) * 2, interpolation=
-        cv2.INTER_NEAREST)
-        hist += label_accuracy_hist(target[0].to("cpu").numpy(), outImg, 7)
+        b, _, h, w = data.size()
+        print(data.size())
+        output = torch.zeros([b, num_class, h, w], dtype=torch.float32, device=device)
+        for patchX in range(0, h - 1, cropsize):
+            for patchY in range(0, w - 1, cropsize):
+                # Propagate forward
+                if patchX >= h - cropsize:
+                    patchX = h - cropsize
+                if patchY >= w - cropsize:
+                    patchY = w - cropsize
+
+                outputCrop = model(data[:, :, patchX:patchX + cropsize, patchY:patchY + cropsize])
+                output[:, :, patchX: (patchX + cropsize), patchY: (patchY + cropsize)] = \
+                    F.interpolate(outputCrop[2], size=(513, 513), mode='bilinear')
+        outImg = output[0].max(0)[1].to("cpu").numpy()
+        hist += label_accuracy_hist(target[0].to("cpu").numpy(), outImg, num_class)
+        _, _, _, iu, _ = hist_to_score(hist)
+        print("mean iu is {}".format(np.nansum(iu[1:]) / 6))
 
     _, acc_cls, recall_cls, iu, _ = hist_to_score(hist)
     print("accuracy of every class is {}, recall of every class is {}, iu of every class is {}".format(
@@ -73,8 +87,41 @@ def test(device, dataloader, model, logFile):
     return np.nansum(iu[1:]) / 6
 
 
+def global2patch(images, masks, cropSize, batchSizeSmall):
+    '''
+    input:
+    images(tensor):b,c,h,w
+    masks(tensor):b,h,w
+    cropSize(int): the size of crop patch
+    output:
+    imageCrops(tensor): batchSize,c,(size)
+    maskCrops(tensor): batchSize,c,(size)
+    bbox: list [b* nparray(x1, y1, x2, y2)] the (x1,y1) is the left_top of bbox, (x2, y2) is the right_bottom of bbox
+    there are in range [0, 1]. x is corresponding to width dimension and y is corresponding to height dimension
+    '''
+    b, c, h, w = images.size()
+
+    imageCrops = []
+    maskCrops = []
+    bbox = []
+    for cntImg in range(b):
+        bboxTemp = []
+        w_offset = np.random.randint(0, max(0, w - cropSize - 1), size=batchSizeSmall)
+        h_offset = np.random.randint(0, max(0, h - cropSize - 1), size=batchSizeSmall)
+        for cntCrop in range(batchSizeSmall):
+            imageCrops.append(images[cntImg, :, h_offset[cntCrop]:h_offset[cntCrop]+cropSize,
+                              w_offset[cntCrop]:w_offset[cntCrop]+cropSize])
+            maskCrops.append(masks[cntImg, h_offset[cntCrop]:h_offset[cntCrop]+cropSize,
+                             w_offset[cntCrop]:w_offset[cntCrop]+cropSize])
+            bboxTemp.append(np.array([w_offset[cntCrop]/(w-1), h_offset[cntCrop]/(h-1),
+                                      (w_offset[cntCrop] + cropSize)/(w-1), (h_offset[cntCrop] + cropSize)/(h-1)]))
+        bbox.append(bboxTemp)
+
+    return torch.stack(imageCrops, dim=0), torch.stack(maskCrops, dim=0), bbox
+
+
 def main():
-    config = "config/cocostuff.yaml"
+    config = "config/config_icnet.yaml"
     cuda = True
     device = torch.device("cuda" if cuda and torch.cuda.is_available() else "cpu")
 
@@ -148,7 +195,7 @@ def main():
     )
 
     # Model
-    model = fpn(CONFIG.N_CLASSES)
+    model = icnet(n_classes=CONFIG.N_CLASSES)
 
     # Optimizer
     optimizer = {
@@ -165,15 +212,10 @@ def main():
         )
     }.get(CONFIG.OPTIMIZER)
 
-    # read old version
-    model = nn.DataParallel(model)
     if CONFIG.ITER_START != 1:
         load_network(CONFIG.SAVE_DIR, model, "SateFPN", "latest")
         print("load previous model succeed, training start from iteration {}".format(CONFIG.ITER_START))
     model.to(device)
-
-    # Loss definition
-    criterion = lovasz_softmax
 
     #visualizer
     vis = Visualizer(CONFIG.DISPLAYPORT, CONFIG.EXPERIENT)
@@ -196,54 +238,47 @@ def main():
 
         iter_loss = 0
         for i in range(1, CONFIG.ITER_SIZE + 1):
-            if not CONFIG.RESAMPLEFLAG:
-                try:
-                    data, target = next(loader_iter)
-                except:
-                    loader_iter = iter(loader)
-                    data, target = next(loader_iter)
-            else:
-                cntFrame = 0
-                clDataStart = time.time()
-                clCnt = 0
-                while cntFrame < batchSizeResample:
-                    clCnt += 1
-                    try:
-                        dataOne, targetOne = next(loader_iter)
-                    except:
-                        loader_iter = iter(loader)
-                        dataOne, targetOne = next(loader_iter)
-
-                    hist = np.bincount(targetOne.numpy().flatten(), minlength=7)
-                    hist = hist / np.sum(hist)
-                    if np.nanmax(hist) <= 0.70:
-                        if cntFrame == 0:
-                            data = dataOne
-                            target = targetOne
-                        else:
-                            data = torch.cat([data, dataOne])
-                            target = torch.cat([target, targetOne])
-                        cntFrame += 1
-                print("collate data takes %.2f sec, collect %d time" % (time.time() - clDataStart, clCnt))
+            try:
+                data, target = next(loader_iter)
+            except:
+                loader_iter = iter(loader)
+                data, target = next(loader_iter)
 
             # Image
+            cntFrame = 0
+            dataResample = []
+            targetResample = []
+            data = data
+            data, target, _ = global2patch(data, target, CONFIG.CROPSIZE, 5)
+            sampleBar = 0.70 + iteration/30000
+            if sampleBar < 1:
+                while cntFrame < 10:
+                    for cntBatch in range(target.shape[0]):
+                        hist = np.bincount(target[cntBatch].numpy().flatten(), minlength=7)
+                        hist = hist / np.sum(hist)
+                        if np.nanmax(hist) <= sampleBar:
+                            dataResample.append(data[cntBatch])
+                            targetResample.append(target[cntBatch])
+                            cntFrame += 1
+                    if cntFrame < 10:
+                        try:
+                            data, target = next(loader_iter)
+                        except:
+                            loader_iter = iter(loader)
+                            data, target = next(loader_iter)
+                        data, target, _ = global2patch(data, target, CONFIG.CROPSIZE, 3)
+                data, target = torch.stack(dataResample, dim=0), torch.stack(targetResample, dim=0)
             data = data.to(device)
-
             # Propagate forward
             output = model(data)
             # Loss
             loss = 0
-            # Resize target for {100%, 75%, 50%, Max} outputs
-            target_ = resize_target(target, output.size(2))
             # classmap = class_to_target(target_, CONFIG.N_CLASSES)
             # target_ = label_bluring(classmap)  # soft crossEntropy target
-            target_ = torch.from_numpy(target_).long()
+            target_ = target.long()
             target_ = target_.to(device)
             # Compute crossentropy loss
-            if CONFIG.CENTERCOMPARE:
-                loss += criterion(output[:,:,60:-60,60:-60], target_[:,60:-60,60:-60])
-            else:
-                loss += criterion(output, target_)
+            loss += model.loss(output, target_)
             # Backpropagate (just compute gradients wrt the loss)
             loss /= float(CONFIG.ITER_SIZE)
             loss.backward()
@@ -257,9 +292,9 @@ def main():
             print("itr {}, loss is {}".format(iteration, iter_loss), file=open(CONFIG.LOGNAME, "a"))  #
             print("time taken for each iter is %.3f" % ((time.time() - iter_start_time)/(iteration-CONFIG.ITER_START+1)))
 
-        if iteration % 10 == 0:
+        if iteration % 5 == 0:
             vis.drawLine(torch.FloatTensor([iteration]), torch.FloatTensor([iter_loss]))
-            vis.displayImg(inputImgTransBack(data[0]), classToRGB(output[0].to("cpu").max(0)[1]),
+            vis.displayImg(inputImgTransBack(data), classToRGB(output[2][0].to("cpu").max(0)[1]),
                            classToRGB(target_[0].to("cpu")))
         # Save a model
         if iteration % CONFIG.ITER_SNAP == 0:
@@ -279,6 +314,7 @@ def main():
             mIOU = test(device, loaderTestVali, model, CONFIG.LOGNAME)
             y_vali = torch.cat((y_vali, torch.FloatTensor([mIOU])))
             vis.drawTestLine(x_test, y_vali, y_train)
+
 
 if __name__ == "__main__":
     main()

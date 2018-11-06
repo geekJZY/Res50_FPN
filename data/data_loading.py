@@ -193,31 +193,31 @@ class MultiDataSet(data.Dataset):
                         interpolation=cv2.INTER_NEAREST,
                     )
 
-            #scale
-            if self.inSize == 2448 and self.cropSize < 2448:
-                scaleSize = int(random.uniform(0.6, 1.4) * 2448)
-            else:
-                scaleSize = int(random.uniform(1, 1.2) * self.inSize)
-            image = cv2.resize(
-                image,
-                (scaleSize, scaleSize),
-                interpolation=cv2.INTER_NEAREST
-            )
-            label = cv2.resize(
-                label,
-                (scaleSize, scaleSize),
-                interpolation=cv2.INTER_NEAREST,
-            )
+            # #scale
+            # if self.inSize == 2448 and self.cropSize < 2448:
+            #     scaleSize = int(random.uniform(0.6, 1.4) * 2448)
+            # else:
+            #     scaleSize = int(random.uniform(1, 1.2) * self.inSize)
+            # image = cv2.resize(
+            #     image,
+            #     (scaleSize, scaleSize),
+            #     interpolation=cv2.INTER_NEAREST
+            # )
+            # label = cv2.resize(
+            #     label,
+            #     (scaleSize, scaleSize),
+            #     interpolation=cv2.INTER_NEAREST,
+            # )
 
-            h, w, _ = image.shape
-            # Crop
-            w_offset = random.randint(0, max(0, w - self.cropSize - 1))
-            h_offset = random.randint(0, max(0, h - self.cropSize - 1))
-
-            image = image[h_offset:h_offset + self.cropSize,
-                          w_offset:w_offset + self.cropSize, :]
-            label = label[h_offset:h_offset + self.cropSize,
-                          w_offset:w_offset + self.cropSize]
+            # h, w, _ = image.shape
+            # # Crop
+            # w_offset = random.randint(0, max(0, w - self.cropSize - 1))
+            # h_offset = random.randint(0, max(0, h - self.cropSize - 1))
+            #
+            # image = image[h_offset:h_offset + self.cropSize,
+            #               w_offset:w_offset + self.cropSize, :]
+            # label = label[h_offset:h_offset + self.cropSize,
+            #               w_offset:w_offset + self.cropSize]
 
             # Rotate
             rotate_time = np.random.randint(low=0, high=4)
